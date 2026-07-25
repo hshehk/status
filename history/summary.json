@@ -10,11 +10,11 @@
     "uptimeWeek": "100.00%",
     "uptimeMonth": "100.00%",
     "uptimeYear": "100.00%",
-    "time": 309,
-    "timeDay": 309,
-    "timeWeek": 309,
-    "timeMonth": 309,
-    "timeYear": 309,
+    "time": 197,
+    "timeDay": 197,
+    "timeWeek": 197,
+    "timeMonth": 197,
+    "timeYear": 197,
     "dailyMinutesDown": {}
   },
   {
@@ -23,18 +23,18 @@
     "icon": "https://icons.duckduckgo.com/ip3/threadsmc.tw.ico",
     "slug": "java",
     "status": "down",
-    "uptime": "62.27%",
-    "uptimeDay": "62.27%",
-    "uptimeWeek": "62.27%",
-    "uptimeMonth": "62.27%",
-    "uptimeYear": "62.27%",
+    "uptime": "0.41%",
+    "uptimeDay": "0.41%",
+    "uptimeWeek": "0.41%",
+    "uptimeMonth": "0.41%",
+    "uptimeYear": "0.41%",
     "time": 0,
     "timeDay": 0,
     "timeWeek": 0,
     "timeMonth": 0,
     "timeYear": 0,
     "dailyMinutesDown": {
-      "2026-07-25": 0
+      "2026-07-25": 49
     }
   }
 ]
