@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>脆台灣 · 服務狀態</title>
+<meta name="description" content="脆台灣官網與伺服器即時運作狀態">
+<link rel="icon" href="./logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff;
+    --bg-soft:#fafafa;
+    --divider:#ebebeb;
+    --divider-strong:#dcdcdc;
+    --text:#0a0a0a;
+    --text-dim:#63666b;
+    --text-faint:#9a9ca1;
+    --up:#0a8f5c;
+    --up-soft:#e7f5ef;
+    --down:#e0233d;
+    --down-soft:#fceaec;
+    --partial:#b8790a;
+    --partial-soft:#faf1de;
+    --tw-blue:#00209b;
+    --tw-blue-soft:#eef0fb;
+    --tw-red:#fe0000;
+    --mono:'JetBrains Mono', ui-monospace, monospace;
+    --sans:'Inter', -apple-system, BlinkMacSystemFont, 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{background:var(--bg);}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:600px; margin:0 auto; padding:0 20px;}
+
+  /* sticky top bar, Threads-app style */
+  .topbar{
+    position:sticky; top:0; z-index:10;
+    background:rgba(255,255,255,.88);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--divider);
+  }
+  .topbar-inner{
+    max-width:600px; margin:0 auto; padding:14px 20px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .mark{
+    width:30px; height:30px; border-radius:9px; background:#000; flex:none;
+    display:flex; align-items:center; justify-content:center; overflow:hidden;
+  }
+  .mark img{width:100%; height:100%; object-fit:cover;}
+  .topbar-name{font-weight:700; font-size:15px; letter-spacing:-0.01em;}
+  .topbar-spacer{flex:1;}
+  .tw-chip{
+    display:flex; align-items:center; gap:5px;
+    font-family:var(--mono); font-size:11px; font-weight:600; color:var(--tw-blue);
+    background:var(--tw-blue-soft); border-radius:99px; padding:5px 10px;
+  }
+  .tw-chip .flag{display:flex; gap:1.5px;}
+  .tw-chip .flag i{width:3px; height:9px; display:block; background:var(--tw-blue);}
+  .tw-chip .flag i:nth-child(2){background:var(--tw-red);}
+
+  /* hero, profile-header style */
+  .hero{padding:28px 0 8px; position:relative;}
+  .tw-watermark{
+    position:absolute; top:-6px; right:-10px; width:150px; height:150px;
+    opacity:.05; pointer-events:none;
+  }
+  .avatar{
+    width:64px; height:64px; border-radius:50%; background:#000;
+    display:flex; align-items:center; justify-content:center; overflow:hidden;
+    border:1px solid var(--divider);
+  }
+  .avatar img{width:100%; height:100%; object-fit:cover;}
+  .identity{margin-top:14px;}
+  .identity h1{font-size:24px; font-weight:800; letter-spacing:-0.02em;}
+  .handle{font-family:var(--mono); font-size:12.5px; color:var(--text-faint); margin-top:3px;}
+  .intro{font-size:14px; color:var(--text-dim); margin-top:10px; max-width:46ch;}
+
+  .status-row{
+    margin-top:20px; padding-top:18px; border-top:1px solid var(--divider);
+    display:flex; align-items:center; gap:10px;
+  }
+  .dot-wrap{position:relative; width:12px; height:12px; flex:none;}
+  .dot{width:12px; height:12px; border-radius:50%; display:block; position:relative; z-index:2;}
+  .dot.up{background:var(--up);}
+  .dot.down{background:var(--down);}
+  .dot.partial{background:var(--partial);}
+  /* signature: dissolving-pixel scatter, echoes the logo's fragmented corner */
+  .px{position:absolute; width:2.5px; height:2.5px; background:currentColor; z-index:1; animation:scatter 2.4s ease-out infinite;}
+  .dot-wrap.up{color:var(--up);} .dot-wrap.down{color:var(--down);} .dot-wrap.partial{color:var(--partial);}
+  .px:nth-child(1){top:-1px; left:6px; animation-delay:0s;}
+  .px:nth-child(2){top:3px; left:11px; animation-delay:.3s;}
+  .px:nth-child(3){top:9px; left:9px; animation-delay:.6s;}
+  .px:nth-child(4){top:8px; left:-2px; animation-delay:.9s;}
+  .px:nth-child(5){top:2px; left:-3px; animation-delay:1.2s;}
+  @keyframes scatter{
+    0%{transform:translate(0,0); opacity:.9;}
+    100%{transform:translate(10px,-6px); opacity:0;}
+  }
+  .status-title{font-size:16px; font-weight:700;}
+  .status-meta{font-family:var(--mono); font-size:12px; color:var(--text-faint); margin-top:2px;}
+  .status-meta b{color:var(--text-dim); font-weight:600;}
+
+  /* section label */
+  .section-label{
+    margin:26px 0 2px; padding-top:22px; border-top:1px solid var(--divider);
+    font-size:11.5px; letter-spacing:.06em; color:var(--text-faint);
+    font-family:var(--mono); text-transform:uppercase;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+
+  /* feed-style rows, no boxes — hairline dividers like Threads posts */
+  .services{margin-top:6px;}
+  .row{
+    padding:16px 0; border-bottom:1px solid var(--divider);
+  }
+  .row-top{display:flex; align-items:center; gap:10px;}
+  .fav{width:26px; height:26px; border-radius:50%; flex:none; background:var(--bg-soft); object-fit:cover; border:1px solid var(--divider);}
+  .row-name{font-weight:700; font-size:15px; flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .pill{
+    font-family:var(--mono); font-size:11px; font-weight:700; padding:4px 10px;
+    border-radius:99px; flex:none; letter-spacing:.01em;
+  }
+  .pill.up{background:var(--up-soft); color:var(--up);}
+  .pill.down{background:var(--down-soft); color:var(--down);}
+  .pill.partial{background:var(--partial-soft); color:var(--partial);}
+  .pill.unknown{background:var(--bg-soft); color:var(--text-faint);}
+
+  .row-url{font-size:12px; color:var(--text-faint); font-family:var(--mono); margin-top:6px; margin-left:36px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+
+  .bars{display:flex; gap:2.5px; margin-top:13px; height:26px;}
+  .bar{flex:1; border-radius:2px; background:var(--divider); min-width:2px;}
+  .bar.up{background:var(--up);}
+  .bar.down{background:var(--down);}
+  .bar.partial{background:var(--partial);}
+
+  .row-bottom{display:flex; justify-content:space-between; align-items:baseline; margin-top:10px;}
+  .stat{font-size:11.5px; color:var(--text-faint); font-family:var(--mono);}
+  .stat b{color:var(--text); font-weight:700;}
+  .stat.right{text-align:right;}
+
+  /* footer */
+  footer{margin-top:8px; padding:28px 0 48px; text-align:center;}
+  .stamp{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:var(--mono); font-size:11px; font-weight:600; color:var(--text-dim);
+    border:1px dashed var(--divider-strong); border-radius:99px; padding:6px 14px; margin-bottom:16px;
+  }
+  .footer-links{display:flex; justify-content:center; gap:18px; font-size:13px; color:var(--text-dim); margin-bottom:8px;}
+  .footer-links a:hover{color:var(--tw-blue);}
+  .footer-note{font-size:11px; color:var(--text-faint); font-family:var(--mono);}
+  .footer-note code{color:var(--text-dim); background:var(--bg-soft); padding:1px 5px; border-radius:4px;}
+
+  .loading{padding:40px 0; text-align:center; color:var(--text-faint); font-family:var(--mono); font-size:13px;}
+
+  @media (prefers-reduced-motion: reduce){
+    .px{animation:none; opacity:.6;}
+  }
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="mark"><img src="./logo.png" alt="脆台灣"></div>
+      <div class="topbar-name">脆台灣</div>
+      <div class="topbar-spacer"></div>
+      <div class="tw-chip"><span class="flag"><i></i><i></i></span>TAIWAN</div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="hero">
+      <svg class="tw-watermark" viewBox="0 0 100 100" fill="none">
+        <path d="M50,4 C57,4 61,14 63,24 C65,33 60,40 64,49 C68,58 63,68 57,80 C54,88 50,96 47,93 C43,88 41,79 39,69 C37,58 31,51 34,41 C37,30 32,20 39,11 C43,6 46,4 50,4 Z" stroke="#00209b" stroke-width="1.5"/>
+      </svg>
+      <div class="avatar"><img src="./logo.png" alt="脆台灣 logo"></div>
+      <div class="identity">
+        <h1>脆台灣</h1>
+        <div class="handle">threadsmc.tw · Threads Taiwan 社群</div>
+        <p class="intro">本頁面即時顯示脆台灣各項服務的運作狀態，資料每 5 分鐘自動更新一次。</p>
+      </div>
+
+      <div class="status-row" id="hero">
+        <div class="dot-wrap up" id="hero-dotwrap">
+          <span class="dot up" id="hero-dot"></span>
+          <span class="px"></span><span class="px"></span><span class="px"></span><span class="px"></span><span class="px"></span>
+        </div>
+        <div>
+          <div class="status-title" id="hero-title">讀取狀態中…</div>
+          <div class="status-meta" id="hero-meta"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label">
+      <span>監控項目</span>
+      <span>即時 · 5 分鐘更新</span>
+    </div>
+    <div class="services" id="services">
+      <div class="loading">讀取監控資料中…</div>
+    </div>
+
+    <footer>
+      <div class="stamp">🇹🇼 Made for 脆台灣</div>
+      <div class="footer-links">
+        <a href="https://github.com/hshehk/status" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.threadsmc.tw" target="_blank" rel="noopener">官方網站</a>
+      </div>
+      <div class="footer-note">由 <code>GitHub Actions</code> 每 5 分鐘自動偵測 · 資料開源於 GitHub</div>
+    </footer>
+  </div>
+
+<script>
+const DATA_URL = './history/summary.json';
+
+const statusText = { up: '正常運作', down: '離線', partial: '部分異常', unknown: '尚無資料' };
+
+function timeAgo(iso){
+  if(!iso) return '';
+  const diff = Math.max(0, Date.now() - new Date(iso).getTime());
+  const m = Math.floor(diff/60000);
+  if(m < 1) return '剛剛';
+  if(m < 60) return m + ' 分鐘前';
+  const h = Math.floor(m/60);
+  if(h < 24) return h + ' 小時前';
+  return Math.floor(h/24) + ' 天前';
+}
+
+function buildBars(daily, days){
+  const out = [];
+  const today = new Date();
+  for(let i = days - 1; i >= 0; i--){
+    const d = new Date(today);
+    d.setDate(d.getDate() - i);
+    const key = d.toISOString().slice(0,10);
+    if(!(key in (daily || {}))){
+      out.push('unknown');
+      continue;
+    }
+    const mins = daily[key];
+    if(mins <= 0) out.push('up');
+    else if(mins >= 1380) out.push('down');
+    else out.push('partial');
+  }
+  return out;
+}
+
+function render(sites){
+  const hasDown = sites.some(s => s.status === 'down');
+  const allUp = sites.every(s => s.status === 'up');
+  const heroDot = document.getElementById('hero-dot');
+  const heroDotWrap = document.getElementById('hero-dotwrap');
+  const heroTitle = document.getElementById('hero-title');
+  const heroMeta = document.getElementById('hero-meta');
+
+  let cls = 'partial';
+  if(allUp) cls = 'up';
+  else if(hasDown) cls = 'down';
+  heroDot.className = 'dot ' + cls;
+  heroDotWrap.className = 'dot-wrap ' + cls;
+  heroTitle.textContent = allUp ? '所有系統正常運作' : (hasDown ? '部分服務發生異常' : '部分服務狀態異常');
+
+  const upCount = sites.filter(s => s.status === 'up').length;
+  heroMeta.innerHTML = '<b>' + upCount + ' / ' + sites.length + '</b> 項服務正常 · 每 5 分鐘自動更新';
+
+  const container = document.getElementById('services');
+  container.innerHTML = '';
+
+  sites.forEach(site => {
+    const status = site.status === 'up' ? 'up' : (site.status === 'down' ? 'down' : 'unknown');
+    const bars = buildBars(site.dailyMinutesDown, 30);
+
+    const row = document.createElement('div');
+    row.className = 'row';
+    row.innerHTML = `
+      <div class="row-top">
+        <img class="fav" src="${site.icon || ''}" onerror="this.style.visibility='hidden'" alt="">
+        <div class="row-name">${site.name}</div>
+        <div class="pill ${status}">${statusText[status] || statusText.unknown}</div>
+      </div>
+      <div class="row-url">${site.url}</div>
+      <div class="bars">${bars.map(b => `<div class="bar ${b}" title="${b}"></div>`).join('')}</div>
+      <div class="row-bottom">
+        <div class="stat">近 30 天 · <b>${site.uptimeMonth || site.uptime || '—'}</b> 正常率</div>
+        <div class="stat right">回應 <b>${site.time != null ? site.time + ' ms' : '—'}</b></div>
+      </div>
+    `;
+    container.appendChild(row);
+  });
+}
+
+fetch(DATA_URL, { cache: 'no-store' })
+  .then(r => {
+    if(!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  })
+  .then(sites => {
+    render(sites);
+    document.getElementById('hero-meta').innerHTML += ' · 最後檢查 <b>' + timeAgo(new Date().toISOString()) + '</b>';
+  })
+  .catch(err => {
+    document.getElementById('services').innerHTML =
+      '<div class="loading">⚠️ 無法讀取監控資料<br><span style="font-size:11px">' + err.message + '</span></div>';
+    document.getElementById('hero-title').textContent = '無法讀取狀態資料';
+    document.getElementById('hero-dotwrap').className = 'dot-wrap partial';
+    document.getElementById('hero-dot').className = 'dot partial';
+  });
+</script>
+</body>
+</html>

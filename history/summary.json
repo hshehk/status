@@ -1,0 +1,40 @@
+[
+  {
+    "name": "脆台灣官網",
+    "url": "https://www.threadsmc.tw",
+    "icon": "https://icons.duckduckgo.com/ip3/www.threadsmc.tw.ico",
+    "slug": "脆台灣官網",
+    "status": "up",
+    "uptime": "100.00%",
+    "uptimeDay": "100.00%",
+    "uptimeWeek": "100.00%",
+    "uptimeMonth": "100.00%",
+    "uptimeYear": "100.00%",
+    "time": 196,
+    "timeDay": 196,
+    "timeWeek": 196,
+    "timeMonth": 196,
+    "timeYear": 196,
+    "dailyMinutesDown": {}
+  },
+  {
+    "name": "脆台灣伺服器(JAVA)",
+    "url": "tcp://threadsmc.tw",
+    "icon": "https://icons.duckduckgo.com/ip3/threadsmc.tw.ico",
+    "slug": "java",
+    "status": "down",
+    "uptime": "0.26%",
+    "uptimeDay": "0.26%",
+    "uptimeWeek": "0.26%",
+    "uptimeMonth": "0.26%",
+    "uptimeYear": "0.26%",
+    "time": 0,
+    "timeDay": 0,
+    "timeWeek": 0,
+    "timeMonth": 0,
+    "timeYear": 0,
+    "dailyMinutesDown": {
+      "2026-07-25": 71
+    }
+  }
+]
