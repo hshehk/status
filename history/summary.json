@@ -23,16 +23,18 @@
     "icon": "https://icons.duckduckgo.com/ip3/threadsmc.tw.ico",
     "slug": "java",
     "status": "down",
-    "uptime": "100.00%",
-    "uptimeDay": "100.00%",
-    "uptimeWeek": "100.00%",
-    "uptimeMonth": "100.00%",
-    "uptimeYear": "100.00%",
+    "uptime": "62.27%",
+    "uptimeDay": "62.27%",
+    "uptimeWeek": "62.27%",
+    "uptimeMonth": "62.27%",
+    "uptimeYear": "62.27%",
     "time": 0,
     "timeDay": 0,
     "timeWeek": 0,
     "timeMonth": 0,
     "timeYear": 0,
-    "dailyMinutesDown": {}
+    "dailyMinutesDown": {
+      "2026-07-25": 0
+    }
   }
 ]
