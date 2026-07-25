@@ -14,7 +14,7 @@ status-website:
   cname: status.evilraid.dpdns.org
   # baseUrl: /your-repo-name
   logoUrl: https://github.com/hshehk/status/blob/master/Threads_Taiwan.png
-  name: 酷炫是甲
+  name: 酷炫是gay
   introTitle: "**Upptime** is the open-source uptime monitor and status page, powered entirely by GitHub."
   introMessage: This is a sample status page which uses **real-time** data from our [GitHub repository](https://github.com/upptime/upptime). No server required — just GitHub Actions, Issues, and Pages. [**Get your own for free**](https://github.com/upptime/upptime)
   navbar:
