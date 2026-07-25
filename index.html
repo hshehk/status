@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>脆台灣 · 系統狀態</title>
+<meta name="description" content="脆台灣官網與伺服器即時運作狀態">
+<link rel="icon" href="./logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0a0d12;
+    --bg-grid: #0d1117;
+    --surface: #12161d;
+    --surface-2: #171c24;
+    --border: #232a35;
+    --border-soft: #1a2029;
+    --text: #e9edf3;
+    --text-dim: #8b95a5;
+    --text-faint: #545e6e;
+    --up: #34d399;
+    --up-dim: #1c4a3c;
+    --down: #ff5d6c;
+    --down-dim: #4a2028;
+    --partial: #f5a524;
+    --partial-dim: #4a3a18;
+    --accent: #7c8cff;
+    --accent-soft: #7c8cff22;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+    --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --display: 'Space Grotesk', var(--sans);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{background:var(--bg);}
+  body{
+    background:
+      radial-gradient(1200px 500px at 50% -10%, #171d2a 0%, transparent 60%),
+      linear-gradient(var(--bg-grid) 1px, transparent 1px) 0 0/100% 28px,
+      var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    padding-bottom:64px;
+  }
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:720px; margin:0 auto; padding:0 20px;}
+
+  /* header */
+  header.top{padding:28px 0 20px;}
+  .brand{display:flex; align-items:center; gap:12px;}
+  .brand img{width:42px; height:42px; border-radius:11px; display:block; background:#000; border:1px solid var(--border);}
+  .brand-name{font-family:var(--display); font-weight:700; font-size:19px; letter-spacing:-0.01em;}
+  .brand-sub{font-size:12px; color:var(--text-faint); font-family:var(--mono); margin-top:1px;}
+
+  /* overall status hero */
+  .hero{
+    margin-top:22px;
+    border:1px solid var(--border);
+    background:linear-gradient(180deg, var(--surface) 0%, #0f1319 100%);
+    border-radius:18px;
+    padding:24px 22px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:radial-gradient(420px 160px at 12% 0%, var(--accent-soft), transparent 70%);
+    pointer-events:none;
+  }
+  .hero-row{display:flex; align-items:center; gap:11px; position:relative;}
+  .dot{width:10px; height:10px; border-radius:50%; flex:none; position:relative;}
+  .dot::after{
+    content:""; position:absolute; inset:-6px; border-radius:50%;
+    border:1px solid currentColor; opacity:.35;
+    animation:pulse 2.2s ease-out infinite;
+  }
+  .dot.up{background:var(--up); color:var(--up);}
+  .dot.down{background:var(--down); color:var(--down);}
+  .dot.partial{background:var(--partial); color:var(--partial);}
+  @keyframes pulse{
+    0%{transform:scale(.6); opacity:.5;}
+    100%{transform:scale(1.9); opacity:0;}
+  }
+  .hero-title{font-family:var(--display); font-weight:700; font-size:22px; letter-spacing:-0.01em;}
+  .hero-meta{margin-top:10px; font-size:13px; color:var(--text-dim); font-family:var(--mono); position:relative;}
+  .hero-meta b{color:var(--text); font-weight:600;}
+
+  /* section label */
+  .section-label{
+    margin:30px 0 12px; font-size:12px; letter-spacing:.08em; color:var(--text-faint);
+    font-family:var(--mono); text-transform:uppercase; display:flex; align-items:center; gap:8px;
+  }
+  .section-label::after{content:""; flex:1; height:1px; background:var(--border-soft);}
+
+  /* service cards */
+  .services{display:flex; flex-direction:column; gap:10px;}
+  .card{
+    border:1px solid var(--border);
+    background:var(--surface);
+    border-radius:14px;
+    padding:16px 16px 14px;
+    transition:border-color .15s ease;
+  }
+  .card:hover{border-color:#2c3644;}
+  .card-top{display:flex; align-items:center; gap:11px;}
+  .fav{width:22px; height:22px; border-radius:6px; flex:none; background:var(--surface-2); object-fit:cover;}
+  .card-name{font-weight:600; font-size:15px; flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .pill{
+    font-family:var(--mono); font-size:11px; font-weight:600; padding:4px 9px;
+    border-radius:99px; flex:none; letter-spacing:.02em;
+    display:flex; align-items:center; gap:5px;
+  }
+  .pill::before{content:""; width:6px; height:6px; border-radius:50%; background:currentColor;}
+  .pill.up{background:var(--up-dim); color:var(--up);}
+  .pill.down{background:var(--down-dim); color:var(--down);}
+  .pill.partial{background:var(--partial-dim); color:var(--partial);}
+  .pill.unknown{background:#232a35; color:var(--text-faint);}
+
+  .card-url{font-size:12px; color:var(--text-faint); font-family:var(--mono); margin-top:6px; margin-left:33px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+
+  .bars{display:flex; gap:2.5px; margin-top:14px; height:30px;}
+  .bar{flex:1; border-radius:2.5px; background:#1d232d; min-width:2px;}
+  .bar.up{background:var(--up);}
+  .bar.down{background:var(--down);}
+  .bar.partial{background:var(--partial);}
+
+  .card-bottom{display:flex; justify-content:space-between; align-items:baseline; margin-top:10px;}
+  .stat{font-size:11px; color:var(--text-faint); font-family:var(--mono);}
+  .stat b{color:var(--text-dim); font-weight:600;}
+  .stat.right{text-align:right;}
+
+  /* footer */
+  footer{margin-top:40px; text-align:center;}
+  .footer-links{display:flex; justify-content:center; gap:18px; font-size:13px; color:var(--text-dim); margin-bottom:10px;}
+  .footer-links a:hover{color:var(--accent);}
+  .footer-note{font-size:11px; color:var(--text-faint); font-family:var(--mono);}
+  .footer-note code{color:var(--text-dim);}
+
+  .loading{padding:40px 0; text-align:center; color:var(--text-faint); font-family:var(--mono); font-size:13px;}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <div class="brand">
+        <img src="./logo.png" alt="logo">
+        <div>
+          <div class="brand-name">脆台灣</div>
+          <div class="brand-sub">status.evilraid.dpdns.org</div>
+        </div>
+      </div>
+
+      <div class="hero" id="hero">
+        <div class="hero-row">
+          <span class="dot up" id="hero-dot"></span>
+          <span class="hero-title" id="hero-title">讀取狀態中…</span>
+        </div>
+        <div class="hero-meta" id="hero-meta"></div>
+      </div>
+    </header>
+
+    <div class="section-label">監控項目</div>
+    <div class="services" id="services">
+      <div class="loading">讀取監控資料中…</div>
+    </div>
+
+    <footer>
+      <div class="footer-links">
+        <a href="https://github.com/hshehk/status" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.threadsmc.tw" target="_blank" rel="noopener">官方網站</a>
+      </div>
+      <div class="footer-note">由 <code>GitHub Actions</code> 每 5 分鐘自動偵測 · 資料開源於 GitHub</div>
+    </footer>
+  </div>
+
+<script>
+const DATA_URL = './history/summary.json';
+
+const statusText = { up: '正常運作', down: '離線', partial: '部分異常', unknown: '尚無資料' };
+
+function timeAgo(iso){
+  if(!iso) return '';
+  const diff = Math.max(0, Date.now() - new Date(iso).getTime());
+  const m = Math.floor(diff/60000);
+  if(m < 1) return '剛剛';
+  if(m < 60) return m + ' 分鐘前';
+  const h = Math.floor(m/60);
+  if(h < 24) return h + ' 小時前';
+  return Math.floor(h/24) + ' 天前';
+}
+
+function buildBars(daily, days){
+  const out = [];
+  const today = new Date();
+  for(let i = days - 1; i >= 0; i--){
+    const d = new Date(today);
+    d.setDate(d.getDate() - i);
+    const key = d.toISOString().slice(0,10);
+    if(!(key in (daily || {}))){
+      out.push('unknown');
+      continue;
+    }
+    const mins = daily[key];
+    if(mins <= 0) out.push('up');
+    else if(mins >= 1380) out.push('down');
+    else out.push('partial');
+  }
+  return out;
+}
+
+function render(sites){
+  const hasDown = sites.some(s => s.status === 'down');
+  const allUp = sites.every(s => s.status === 'up');
+  const heroDot = document.getElementById('hero-dot');
+  const heroTitle = document.getElementById('hero-title');
+  const heroMeta = document.getElementById('hero-meta');
+
+  if(allUp){
+    heroDot.className = 'dot up';
+    heroTitle.textContent = '所有系統正常運作';
+  } else if(hasDown){
+    heroDot.className = 'dot down';
+    heroTitle.textContent = '部分服務發生異常';
+  } else {
+    heroDot.className = 'dot partial';
+    heroTitle.textContent = '部分服務狀態異常';
+  }
+  const upCount = sites.filter(s => s.status === 'up').length;
+  heroMeta.innerHTML = '<b>' + upCount + ' / ' + sites.length + '</b> 項服務正常 · 每 5 分鐘自動更新';
+
+  const container = document.getElementById('services');
+  container.innerHTML = '';
+
+  sites.forEach(site => {
+    const status = site.status === 'up' ? 'up' : (site.status === 'down' ? 'down' : 'unknown');
+    const bars = buildBars(site.dailyMinutesDown, 30);
+
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="card-top">
+        <img class="fav" src="${site.icon || ''}" onerror="this.style.visibility='hidden'" alt="">
+        <div class="card-name">${site.name}</div>
+        <div class="pill ${status}">${statusText[status] || statusText.unknown}</div>
+      </div>
+      <div class="card-url">${site.url}</div>
+      <div class="bars">${bars.map(b => `<div class="bar ${b}" title="${b}"></div>`).join('')}</div>
+      <div class="card-bottom">
+        <div class="stat">近 30 天 · <b>${site.uptimeMonth || site.uptime || '—'}</b> 正常率</div>
+        <div class="stat right">回應 <b>${site.time != null ? site.time + ' ms' : '—'}</b></div>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+fetch(DATA_URL, { cache: 'no-store' })
+  .then(r => {
+    if(!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  })
+  .then(sites => {
+    render(sites);
+    document.getElementById('hero-meta').innerHTML += ' · 最後檢查 <b>' + timeAgo(new Date().toISOString()) + '</b>';
+  })
+  .catch(err => {
+    document.getElementById('services').innerHTML =
+      '<div class="loading">⚠️ 無法讀取監控資料<br><span style="font-size:11px">' + err.message + '</span></div>';
+    document.getElementById('hero-title').textContent = '無法讀取狀態資料';
+    document.getElementById('hero-dot').className = 'dot partial';
+  });
+</script>
+</body>
+</html>
