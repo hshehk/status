@@ -10,7 +10,7 @@ sites:
 status-website:
   cname: status.evilraid.dpdns.org
   logoUrl: https://raw.githubusercontent.com/hshehk/status/master/Threads_Taiwan.png
-  name: 酷炫是甲
+  name: 酷炫是gay
   introTitle: "**脆台灣** 服務即時狀態監控"
   introMessage: 本頁面即時顯示脆台灣各項服務的運作狀態,資料每 5 分鐘自動更新一次。
   navbar:
